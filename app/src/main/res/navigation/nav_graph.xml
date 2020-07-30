@@ -18,5 +18,8 @@
         android:name="com.example.mvvmtesttask.view.ui.fragments.cardholders_list_fragment.CardsListFragment"
         android:label="Мои карты"
         tools:layout="@layout/fragment_cards_list">
+        <action
+            android:id="@+id/action_cardsList_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

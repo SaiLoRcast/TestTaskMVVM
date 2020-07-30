@@ -1,10 +1,11 @@
 package com.example.mvvmtesttask.view.ui.fragments.main_fragment
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -16,6 +17,10 @@ import kotlinx.android.synthetic.main.fragment_main.*
 class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainFragmentViewModel
+    private lateinit var cardholdersResponse: CardholdersResponse
+    private lateinit var exchangeRatesResponse: ExchangeRatesResponse
+
+    private var position: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,23 +36,35 @@ class MainFragment : Fragment() {
         viewModel.updateCardholders()
         updateExchangeRates()
 
+        val sharedPreference =
+            requireContext().getSharedPreferences("position", Context.MODE_PRIVATE)
+        position = sharedPreference.getInt("position", 0)
+
         card.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable("cardholders", cardholdersResponse)
             Navigation.findNavController(view)
                 .navigate(R.id.action_mainFragment_to_cardsList, bundle)
         }
+
+        gbp.setOnClickListener {
+            balance_in_currency.text = String.format("£ %1s", getInCurrency(cardholdersResponse.users[position].balance, exchangeRatesResponse.Valute.get("USD")!!.Value/ exchangeRatesResponse.Valute.get("GBP")!!.Value))
+        }
+
 //        swipe_to_refresh_data.setOnRefreshListener {
 //            updateExchangeRates()
 //            swipe_to_refresh_data.isRefreshing = false
 //        }
     }
 
-    lateinit var cardholdersResponse: CardholdersResponse
+    fun getInCurrency(balance: Float, exchangeRate:Float): Float {
+        return balance * exchangeRate
+    }
 
     private fun updateExchangeRates() {
-        viewModel.exchangeRates.observe(viewLifecycleOwner, Observer {
+        viewModel.exchangeRates.observe(viewLifecycleOwner, Observer { it ->
             updateExchangeRates(it)
+            exchangeRatesResponse = it
         })
 
         viewModel.cardholders.observe(viewLifecycleOwner, Observer {
@@ -59,16 +76,23 @@ class MainFragment : Fragment() {
     }
 
     private fun updateCardholders(cardholdersResponse: CardholdersResponse) {
-        card_number.text = cardholdersResponse.users[0].card_number
-        cardholder_name.text = cardholdersResponse.users[0].cardholder_name
-        card_valid.text = cardholdersResponse.users[0].valid
-        card_balance.text = String.format("$%1s", cardholdersResponse.users[0].balance.toString())
-
+        card_number.text = cardholdersResponse.users[position].card_number
+        cardholder_name.text = cardholdersResponse.users[position].cardholder_name
+        card_valid.text = cardholdersResponse.users[position].valid
+        card_balance.text =
+            String.format("$%1s", cardholdersResponse.users[position].balance.toString())
+        when (cardholdersResponse.users[position].type) {
+            "mastercard" -> card_logo.setImageResource(R.drawable.ic_master_card_logo)
+            "visa" -> card_logo.setImageResource(R.drawable.ic_visa_logo)
+            "unionpay" -> card_logo.setImageResource(R.drawable.ic_unionpay_logo)
+        }
 
     }
 
     private fun updateExchangeRates(exchangeRatesResponse: ExchangeRatesResponse?) {
-        Toast.makeText(context, "A{DATE", Toast.LENGTH_SHORT).show()
-        balance_in_currency.text
+
+        Log.d("FR_", exchangeRatesResponse!!.Valute.keys.toString())
+        Log.d("FR_", exchangeRatesResponse.Valute.get("GBP")!!.Value.toString())
+
     }
 }

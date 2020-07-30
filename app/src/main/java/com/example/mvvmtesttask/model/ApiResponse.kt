@@ -4,7 +4,6 @@ import java.io.Serializable
 
 
 data class ExchangeRatesResponse(
-
     val Date: String,
     val PreviousDate: String,
     val PreviousURL: String,

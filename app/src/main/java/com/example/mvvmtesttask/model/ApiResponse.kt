@@ -1,5 +1,7 @@
 package com.example.mvvmtesttask.model
 
+import java.io.Serializable
+
 
 data class ExchangeRatesResponse(
 
@@ -22,7 +24,7 @@ data class Valute(
 
 data class CardholdersResponse(
     val users: List<Cardholders>
-)
+) : Serializable
 
 data class Cardholders(
     val card_number: String,

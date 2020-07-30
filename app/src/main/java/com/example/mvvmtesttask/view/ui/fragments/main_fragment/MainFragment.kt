@@ -1,11 +1,11 @@
 package com.example.mvvmtesttask.view.ui.fragments.main_fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.example.mvvmtesttask.R
@@ -30,14 +30,20 @@ class MainFragment : Fragment() {
         viewModel.updateExchangeRates(requireContext())
         viewModel.updateCardholders()
         updateExchangeRates()
+
         card.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_cardsList)
+            val bundle = Bundle()
+            bundle.putSerializable("cardholders", cardholdersResponse)
+            Navigation.findNavController(view)
+                .navigate(R.id.action_mainFragment_to_cardsList, bundle)
         }
 //        swipe_to_refresh_data.setOnRefreshListener {
 //            updateExchangeRates()
 //            swipe_to_refresh_data.isRefreshing = false
 //        }
     }
+
+    lateinit var cardholdersResponse: CardholdersResponse
 
     private fun updateExchangeRates() {
         viewModel.exchangeRates.observe(viewLifecycleOwner, Observer {
@@ -46,6 +52,8 @@ class MainFragment : Fragment() {
 
         viewModel.cardholders.observe(viewLifecycleOwner, Observer {
             updateCardholders(it)
+            cardholdersResponse = it
+
         })
 
     }
@@ -61,5 +69,6 @@ class MainFragment : Fragment() {
 
     private fun updateExchangeRates(exchangeRatesResponse: ExchangeRatesResponse?) {
         Toast.makeText(context, "A{DATE", Toast.LENGTH_SHORT).show()
+        balance_in_currency.text
     }
 }

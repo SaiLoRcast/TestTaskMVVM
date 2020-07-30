@@ -15,9 +15,8 @@
     </fragment>
     <fragment
         android:id="@+id/cardsListFragment"
-        android:name="com.example.mvvmtesttask.view.ui.fragments.CardsListFragment"
+        android:name="com.example.mvvmtesttask.view.ui.fragments.cardholders_list_fragment.CardsListFragment"
         android:label="Мои карты"
         tools:layout="@layout/fragment_cards_list">
-
     </fragment>
 </navigation>

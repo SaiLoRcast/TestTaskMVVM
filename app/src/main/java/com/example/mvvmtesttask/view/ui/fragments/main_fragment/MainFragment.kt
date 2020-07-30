@@ -65,6 +65,7 @@ class MainFragment : Fragment() {
         viewModel.exchangeRates.observe(viewLifecycleOwner, Observer { it ->
             updateExchangeRates(it)
             exchangeRatesResponse = it
+
         })
 
         viewModel.cardholders.observe(viewLifecycleOwner, Observer {
@@ -81,6 +82,8 @@ class MainFragment : Fragment() {
         card_valid.text = cardholdersResponse.users[position].valid
         card_balance.text =
             String.format("$%1s", cardholdersResponse.users[position].balance.toString())
+        balance_in_currency.text = String.format("£ %1s", cardholdersResponse.users[position].balance.toString())
+
         when (cardholdersResponse.users[position].type) {
             "mastercard" -> card_logo.setImageResource(R.drawable.ic_master_card_logo)
             "visa" -> card_logo.setImageResource(R.drawable.ic_visa_logo)

@@ -5,6 +5,7 @@
     <color name="colorAccent">#03DAC5</color>
 
     <color name="background">#F1F3F9</color>
+    <color name="active_background">#0083E1</color>
     <color name="color_white">#FFFFFF</color>
     <color name="text">#141414</color>
     <color name="text_smoke">#8C9AAE</color>

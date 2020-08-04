@@ -56,9 +56,9 @@ class HistoryListAdapter(
             transactionCost.text = String.format("$ %1s", itemData.amount)
 
             when (selectedExchangeRate) {
-                1-> transactionCostInCurrency.text = String.format("£ %1s", round(getInCurrency(itemData.amount.toFloat(), exchangeRate)))
-                2-> transactionCostInCurrency.text = String.format("€ %1s", round(getInCurrency(itemData.amount.toFloat(), exchangeRate)))
-                3-> transactionCostInCurrency.text = String.format("₽ %1s", round(getInCurrency(itemData.amount.toFloat(), exchangeRate)))
+                1-> transactionCostInCurrency.text = String.format("£ %.2f %n", getInCurrency(itemData.amount.toFloat(), exchangeRate))
+                2-> transactionCostInCurrency.text = String.format("€ %.2f %n", getInCurrency(itemData.amount.toFloat(), exchangeRate))
+                3-> transactionCostInCurrency.text = String.format("₽ %.2f %n", getInCurrency(itemData.amount.toFloat(), exchangeRate))
 
             }
 

@@ -53,8 +53,6 @@ class MainFragment : Fragment() {
             }
             operation.await()
 
-//            delay(300)
-            // update views
             updateHistoryList(
                 exchangeRatesResponse!!.Valute.get("USD")!!.Value / exchangeRatesResponse!!.Valute.get(
                     "GBP"
@@ -76,7 +74,7 @@ class MainFragment : Fragment() {
 
         gbp.setOnClickListener {
             balance_in_currency.text = String.format(
-                "£ %1s",
+                "£ %.2f %n",
                 getInCurrency(
                     cardholdersResponse!!.users[position].balance,
                     exchangeRatesResponse!!.Valute.get("USD")!!.Value / exchangeRatesResponse!!.Valute.get(
@@ -94,7 +92,7 @@ class MainFragment : Fragment() {
         }
         eur.setOnClickListener {
             balance_in_currency.text = String.format(
-                "€ %1s",
+                "€ %.2f %n",
                 getInCurrency(
                     cardholdersResponse!!.users[position].balance,
                     exchangeRatesResponse!!.Valute.get("USD")!!.Value / exchangeRatesResponse!!.Valute.get(
@@ -113,7 +111,7 @@ class MainFragment : Fragment() {
 
         rub.setOnClickListener {
             balance_in_currency.text = String.format(
-                "₽ %1s",
+                "₽ %.2f %n",
                 getInCurrency(
                     cardholdersResponse!!.users[position].balance,
                     exchangeRatesResponse!!.Valute.get("USD")!!.Value

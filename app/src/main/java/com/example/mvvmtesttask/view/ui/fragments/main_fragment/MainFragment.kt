@@ -46,13 +46,20 @@ class MainFragment : Fragment() {
 
         lifecycleScope.launch {
             val operation = async(Dispatchers.IO) {
-                
+
+                while (!isDataLoaded()) {
+
+                }
             }
             operation.await()
 
-            delay(300)
+//            delay(300)
             // update views
-            updateHistoryList(exchangeRatesResponse!!.Valute.get("USD")!!.Value/ exchangeRatesResponse!!.Valute.get("GBP")!!.Value)
+            updateHistoryList(
+                exchangeRatesResponse!!.Valute.get("USD")!!.Value / exchangeRatesResponse!!.Valute.get(
+                    "GBP"
+                )!!.Value
+            )
             gbp.performClick()
         }
 
@@ -68,20 +75,50 @@ class MainFragment : Fragment() {
         }
 
         gbp.setOnClickListener {
-            balance_in_currency.text = String.format("£ %1s", getInCurrency(cardholdersResponse!!.users[position].balance, exchangeRatesResponse!!.Valute.get("USD")!!.Value/ exchangeRatesResponse!!.Valute.get("GBP")!!.Value))
+            balance_in_currency.text = String.format(
+                "£ %1s",
+                getInCurrency(
+                    cardholdersResponse!!.users[position].balance,
+                    exchangeRatesResponse!!.Valute.get("USD")!!.Value / exchangeRatesResponse!!.Valute.get(
+                        "GBP"
+                    )!!.Value
+                )
+            )
             setupViews(gbp)
             selectedExchangeRate = 1
-            updateHistoryList(exchangeRatesResponse!!.Valute.get("USD")!!.Value/ exchangeRatesResponse!!.Valute.get("GBP")!!.Value)
+            updateHistoryList(
+                exchangeRatesResponse!!.Valute.get("USD")!!.Value / exchangeRatesResponse!!.Valute.get(
+                    "GBP"
+                )!!.Value
+            )
         }
         eur.setOnClickListener {
-            balance_in_currency.text = String.format("€ %1s", getInCurrency(cardholdersResponse!!.users[position].balance, exchangeRatesResponse!!.Valute.get("USD")!!.Value/ exchangeRatesResponse!!.Valute.get("EUR")!!.Value))
+            balance_in_currency.text = String.format(
+                "€ %1s",
+                getInCurrency(
+                    cardholdersResponse!!.users[position].balance,
+                    exchangeRatesResponse!!.Valute.get("USD")!!.Value / exchangeRatesResponse!!.Valute.get(
+                        "EUR"
+                    )!!.Value
+                )
+            )
             setupViews(eur)
             selectedExchangeRate = 2
-            updateHistoryList(exchangeRatesResponse!!.Valute.get("USD")!!.Value/ exchangeRatesResponse!!.Valute.get("EUR")!!.Value)
+            updateHistoryList(
+                exchangeRatesResponse!!.Valute.get("USD")!!.Value / exchangeRatesResponse!!.Valute.get(
+                    "EUR"
+                )!!.Value
+            )
         }
 
         rub.setOnClickListener {
-            balance_in_currency.text = String.format("₽ %1s", getInCurrency(cardholdersResponse!!.users[position].balance, exchangeRatesResponse!!.Valute.get("USD")!!.Value))
+            balance_in_currency.text = String.format(
+                "₽ %1s",
+                getInCurrency(
+                    cardholdersResponse!!.users[position].balance,
+                    exchangeRatesResponse!!.Valute.get("USD")!!.Value
+                )
+            )
             setupViews(rub)
             selectedExchangeRate = 3
             updateHistoryList(exchangeRatesResponse!!.Valute.get("USD")!!.Value)
@@ -89,9 +126,16 @@ class MainFragment : Fragment() {
 
     }
 
+    private fun isDataLoaded(): Boolean {
+        if (exchangeRatesResponse != null && cardholdersResponse != null) {
+            return true
+        }
+        return false
+    }
+
     private fun setupViews(view: LinearLayout?) {
         when (view) {
-            gbp-> {
+            gbp -> {
                 gbp.setBackgroundResource(R.color.active_background)
                 eur.setBackgroundResource(R.color.color_white)
                 rub.setBackgroundResource(R.color.color_white)
@@ -102,7 +146,7 @@ class MainFragment : Fragment() {
                 eur_name.setTextColor(resources.getColor(R.color.text_smoke))
                 rub_name.setTextColor(resources.getColor(R.color.text_smoke))
             }
-            eur-> {
+            eur -> {
                 gbp.setBackgroundResource(R.color.color_white)
                 eur.setBackgroundResource(R.color.active_background)
                 rub.setBackgroundResource(R.color.color_white)
@@ -113,7 +157,7 @@ class MainFragment : Fragment() {
                 eur_name.setTextColor(resources.getColor(R.color.color_white))
                 rub_name.setTextColor(resources.getColor(R.color.text_smoke))
             }
-            rub-> {
+            rub -> {
                 gbp.setBackgroundResource(R.color.color_white)
                 eur.setBackgroundResource(R.color.color_white)
                 rub.setBackgroundResource(R.color.active_background)
@@ -129,7 +173,7 @@ class MainFragment : Fragment() {
 
     }
 
-    private fun getInCurrency(balance: Float, exchangeRate:Float): Float {
+    private fun getInCurrency(balance: Float, exchangeRate: Float): Float {
         return balance * exchangeRate
     }
 
@@ -165,7 +209,6 @@ class MainFragment : Fragment() {
         card_valid.text = cardholdersResponse.users[position].valid
         card_balance.text =
             String.format("$%1s", cardholdersResponse.users[position].balance.toString())
-        balance_in_currency.text = String.format("£ %1s", cardholdersResponse.users[position].balance.toString())
 
         when (cardholdersResponse.users[position].type) {
             "mastercard" -> card_logo.setImageResource(R.drawable.ic_master_card_logo)
